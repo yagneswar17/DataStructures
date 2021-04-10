@@ -1,0 +1,85 @@
+#include <stdio.h>
+
+int main()
+{
+	char str[1000],ans[1000],stack[1000],ch;
+	int i,t,z,j=0,k=0;
+	scanf("%d",&t);
+	for(z=0;z<t;z++)
+	{
+		j=0;
+		k=0;
+		scanf("%s",str);
+		for(i=0;str[i]!='\0';i++)
+		{
+			ch=str[i];
+			if(ch=='(')
+			{
+				stack[k]=ch;
+				k++;
+			}
+			else if(ch==')')
+			{
+				while(stack[k-1]!='(')
+				{
+					ans[j]=stack[k-1];
+					j++;
+					k--;
+				}
+				k--;
+			}
+			else if((ch>='A'&&ch<='Z')||(ch>='a'&&ch<='z')||(ch>='0'&&ch<='9'))
+			{
+				ans[j]=ch;
+				j++;
+			}
+			else if(ch=='^')
+			{
+			 lb0:
+				if(k!=0&&stack[k-1]=='^')
+				{
+					ans[j]=stack[k-1];
+					k--;
+					j++;
+					goto lb0;
+				}
+				stack[k]=ch;
+				k++;
+			}
+			else if(ch=='/'||ch=='*')
+			{
+			 lb1:
+				if(k!=0&&(stack[k-1]=='^'||stack[k-1]=='/'||stack[k-1]=='*'))
+				{
+					ans[j]=stack[k-1];
+					k--;
+					j++;
+					goto lb1;
+				}
+				stack[k]=ch;
+				k++;
+			}
+			else if(ch=='+'||ch=='-')
+			{
+			 lb2:
+				if(k!=0&&(stack[k-1]=='^'||stack[k-1]=='/'||stack[k-1]=='*'||stack[k-1]=='+'||stack[k-1]=='-'))
+				{
+					ans[j]=stack[k-1];
+					k--;
+					j++;
+					goto lb2;
+				}
+				stack[k]=ch;
+				k++;
+			}
+		}
+		while(k>0)
+		{
+			ans[j]=stack[k-1];
+			k--;
+			j++;
+		}
+		ans[j]='\0';
+		puts(ans);
+	}
+}
